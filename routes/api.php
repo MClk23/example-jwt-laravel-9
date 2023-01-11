@@ -16,21 +16,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+Route::prefix(('v1'))->group(function(){
+    Route::controller(AuthController::class)->group(function () {
+        Route::post('login', 'login');
+        Route::post('register', 'register');
+        //Route::post('logout', 'logout');
+        //Route::post('refresh', 'refresh');
+    });
+    //Route user type one
+    Route::middleware(['auth:api'])->group(function(){
 
-Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
-    Route::post('register', 'register');
-    Route::post('logout', 'logout');
-    Route::post('refresh', 'refresh');
-});
+        Route::controller(TodoController::class)->group(function (){
+            Route::get('todos', 'index');
+            //Route::post('todo', 'store');
+            //Route::get('todo/{id}', 'show');
+            //Route::put('todo/{$id}', 'update');
+            //Route::delete('todos', 'destroy ');
+        });
+    });
 
-Route::controller(TodoController::class)->group(function (){
-    Route::get('todos', 'index');
-    Route::post('todo', 'store');
-    Route::get('todo/{id}', 'show');
-    Route::put('todo/{$id}', 'update');
-    Route::delete('todos', 'destroy ');
+    //Routes for administrator
+
+
+
 });
